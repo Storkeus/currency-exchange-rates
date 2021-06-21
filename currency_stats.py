@@ -22,6 +22,10 @@ def count_exchange_rates_mean(exchange_rates: numpy.array):
         return False
 
 
+def count_exchange_rates_median(exchange_rates: numpy.array):
+    return
+
+
 def main():
     print("Hello world!")
 
