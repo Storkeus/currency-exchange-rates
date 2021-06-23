@@ -34,6 +34,10 @@ def count_exchange_rates_mean(
     exchange_rates): return __reduce_exchange_rates(exchange_rates, numpy.mean)
 
 
+def get_exchange_rates(selling_currency, buying_currency, date_start, date_end):
+    return False
+
+
 def main():
     print("Hello world!")
 
