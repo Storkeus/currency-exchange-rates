@@ -1,7 +1,7 @@
 # count_mean function testing
 
+from lib.calculations_on_exchange_rates import count_exchange_rates_mean
 import numpy
-from currency_stats import count_exchange_rates_mean
 
 
 def test_empty_list():

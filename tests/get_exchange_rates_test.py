@@ -1,9 +1,8 @@
 # get_exchange_rates function testing
 
+from lib.get_exchange_rates import get_exchange_rates
 import pytest
 import numpy
-import json
-from currency_stats import get_exchange_rates
 
 
 @pytest.fixture
