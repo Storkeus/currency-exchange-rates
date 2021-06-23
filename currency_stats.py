@@ -22,6 +22,10 @@ def __reduce_exchange_rates(exchange_rates: numpy.array, reducer):
         return False
 
 
+def count_exchange_rates_percentile(
+    exchange_rates: numpy.array, percentile: int): return __reduce_exchange_rates(exchange_rates, lambda exchange_rates: numpy.percentile(exchange_rates, percentile))
+
+
 def count_exchange_rates_median(
     exchange_rates): return __reduce_exchange_rates(exchange_rates, numpy.median)
 
