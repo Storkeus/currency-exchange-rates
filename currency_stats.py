@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+import json
 import numpy
+from numpy.lib import percentile
 import requests
 import datetime
+import sys
+import argparse
 
 
 def __reduce_exchange_rates(exchange_rates: numpy.array, reducer):
@@ -88,13 +92,17 @@ def get_exchange_rates(currency_base: str, currency_target: str, date_start: str
         # API endpoint that returns exchange rates in given time
         url = 'https://api.exchangerate.host/timeseries?base={}&symbols={}&start_date={}&end_date={}'.format(
             currency_base, currency_target, date_start, date_end)
+
         response = requests.get(url)
         data = response.json()
 
         if(data['success']):
-            exchange_rates = numpy.array([])
-            for date, rates in data['rates'].items():
-                numpy.append(exchange_rates, rates[currency_target])
+            rates = data['rates'].items()
+            exchange_rates = numpy.empty(len(rates))
+            i = 0
+            for date, rates in rates:
+                exchange_rates[i] = rates[currency_target]
+                i += 1
             return exchange_rates
         else:
             raise Exception("Exchange rates couldn't be loaded")
@@ -104,7 +112,50 @@ def get_exchange_rates(currency_base: str, currency_target: str, date_start: str
 
 
 def main():
-    print('Hello world!')
+    # Parse arguments
+    parser = argparse.ArgumentParser(
+        description='A program that returns mean, mediana, 75 percentil and 95 percentil of exchange rates for given currencies in given time')
+
+    parser.add_argument('currency_base', metavar='currency_base',
+                        help='Base currency for exchange rates')
+
+    parser.add_argument('currency_target', metavar='currency_target',
+                        help='Target currency for exchange rates')
+
+    parser.add_argument('date_start', metavar='date_start',
+                        help='Start date for exchange rates list')
+
+    parser.add_argument('date_end', metavar='date_start',
+                        help='End date for exchange rates list')
+
+    arguments_raw = sys.argv
+    # Remove file name from arguments as it is not needed
+    del arguments_raw[0]
+    arguments = parser.parse_args(sys.argv)
+
+    # Get and process exchange rates
+    exchange_rates = get_exchange_rates(
+        arguments.currency_base, arguments.currency_target, arguments.date_start, arguments.date_end)
+
+    result = dict()
+
+    def format_result(result): return round(result, 2)
+    mean = format_result(count_exchange_rates_mean(exchange_rates))
+    median = format_result(count_exchange_rates_median(exchange_rates))
+    percentile_75 = format_result(
+        count_exchange_rates_percentile(exchange_rates, 75))
+    percentile_95 = format_result(
+        count_exchange_rates_percentile(exchange_rates, 95))
+
+    result['currency'] = "{}/{}".format(arguments.currency_base,
+                                        arguments.currency_target)
+
+    result['avg'] = mean
+    result['med'] = median
+    result['75p'] = percentile_75
+    result['95p'] = percentile_95
+    print(json.dumps(result))
+    return 0
 
 
 if __name__ == "__main__":
