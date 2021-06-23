@@ -26,12 +26,12 @@ def incorrect_date_format():
 
 
 @pytest.fixture
-def correct_selling_currency():
+def correct_base_currency():
     return 'USD'
 
 
 @pytest.fixture
-def correct_buying_currency():
+def correct_target_currency():
     return 'EUR'
 
 
@@ -50,36 +50,36 @@ def test_nonstring_values(nonstring_value):
            nonstring_value, nonstring_value,  nonstring_value) == False)
 
 
-def test_incorrect_selling_currency(incorrect_currency, correct_buying_currency, correct_date_start,  correct_date_end):
+def test_incorrect_target_currency(incorrect_currency, correct_target_currency, correct_date_start,  correct_date_end):
     assert(get_exchange_rates(incorrect_currency,
-           correct_buying_currency, correct_date_start,  correct_date_end) == False)
+           correct_target_currency, correct_date_start,  correct_date_end) == False)
 
 
-def test_incorrect_buying_currency(correct_selling_currency, incorrect_currency,  correct_date_start,  correct_date_end):
-    assert(get_exchange_rates(correct_selling_currency, incorrect_currency,
+def test_incorrect_base_currency(correct_base_currency, incorrect_currency,  correct_date_start,  correct_date_end):
+    assert(get_exchange_rates(correct_base_currency, incorrect_currency,
            correct_date_start,  correct_date_end) == False)
 
 
-def test_incorrect_date_start_value(correct_selling_currency, correct_buying_currency, incorrect_date_value, correct_date_end):
-    assert(get_exchange_rates(correct_selling_currency,
-           correct_buying_currency, incorrect_date_value, correct_date_end) == False)
+def test_incorrect_date_start_value(correct_base_currency, correct_target_currency, incorrect_date_value, correct_date_end):
+    assert(get_exchange_rates(correct_base_currency,
+           correct_target_currency, incorrect_date_value, correct_date_end) == False)
 
 
-def test_incorrect_date_end_value(correct_selling_currency, correct_buying_currency, correct_date_start, incorrect_date_value):
-    assert(get_exchange_rates(correct_selling_currency,
-           correct_buying_currency, correct_date_start, incorrect_date_value) == False)
+def test_incorrect_date_end_value(correct_base_currency, correct_target_currency, correct_date_start, incorrect_date_value):
+    assert(get_exchange_rates(correct_base_currency,
+           correct_target_currency, correct_date_start, incorrect_date_value) == False)
 
 
-def test_incorrect_date_end_format(correct_selling_currency, correct_buying_currency, correct_date_start, incorrect_date_format):
-    assert(get_exchange_rates(correct_selling_currency,
-           correct_buying_currency, correct_date_start, incorrect_date_format) == False)
+def test_incorrect_date_end_format(correct_base_currency, correct_target_currency, correct_date_start, incorrect_date_format):
+    assert(get_exchange_rates(correct_base_currency,
+           correct_target_currency, correct_date_start, incorrect_date_format) == False)
 
 
-def test_incorrect_date_start_format(correct_selling_currency, correct_buying_currency, incorrect_date_format, correct_date_end):
-    assert(get_exchange_rates(correct_selling_currency,
-           correct_buying_currency, incorrect_date_format, correct_date_end) == False)
+def test_incorrect_date_start_format(correct_base_currency, correct_target_currency, incorrect_date_format, correct_date_end):
+    assert(get_exchange_rates(correct_base_currency,
+           correct_target_currency, incorrect_date_format, correct_date_end) == False)
 
 
-def test_everything_correct(correct_selling_currency, correct_buying_currency, correct_date_start, correct_date_end):
-    assert(type(get_exchange_rates(correct_selling_currency, correct_buying_currency,
+def test_everything_correct(correct_base_currency, correct_target_currency, correct_date_start, correct_date_end):
+    assert(type(get_exchange_rates(correct_base_currency, correct_target_currency,
            correct_date_start, correct_date_end)) == numpy.ndarray)
