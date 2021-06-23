@@ -2,6 +2,7 @@
 
 import pytest
 import numpy
+import json
 from currency_stats import get_exchange_rates
 
 
@@ -45,12 +46,27 @@ def nonstring_value():
     return [1, 2, 3]
 
 
+@pytest.fixture(autouse=True)
+def request_symbols_mock(requests_mock):
+    # mock available symbols endpoint
+    requests_mock.get('https://api.exchangerate.host/symbols',
+                      text='{"success":true,"symbols":{"USD":{"description":"United States Dollar","code":"USD"},"EUR":{"description":"Euro","code":"EUR"}}}')
+
+
+@pytest.fixture(autouse=True)
+def request_rates_mock(requests_mock):
+    # mock rates endpoint
+    requests_mock.get('https://api.exchangerate.host/timeseries?base=USD&symbols=EUR&start_date=2020-01-01&end_date=2021-04-30',
+                      text='{"success":true,"base":"EUR","rates":{"2020-01-01":{"EUR":5}}}')
+
+
 def test_nonstring_values(nonstring_value):
     assert(get_exchange_rates(nonstring_value,
            nonstring_value, nonstring_value,  nonstring_value) == False)
 
 
 def test_incorrect_target_currency(incorrect_currency, correct_target_currency, correct_date_start,  correct_date_end):
+
     assert(get_exchange_rates(incorrect_currency,
            correct_target_currency, correct_date_start,  correct_date_end) == False)
 
