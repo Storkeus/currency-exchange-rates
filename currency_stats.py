@@ -1,43 +1,13 @@
 #!/usr/bin/env python3
 
 import json
+from lib.calculations_on_exchange_rates import count_exchange_rates_mean, count_exchange_rates_median, count_exchange_rates_percentile
 import numpy
 from numpy.lib import percentile
 import requests
 import datetime
 import sys
 import argparse
-
-
-def __reduce_exchange_rates(exchange_rates: numpy.array, reducer):
-    try:
-
-        if numpy.any(exchange_rates < 0):
-            raise Exception("Negative values are not allowed")
-
-        if exchange_rates.ndim > 1:
-            raise Exception("Multidimensional arrays are not allowed")
-
-        if exchange_rates.size == 0:
-            result = 0
-        else:
-            result = reducer(exchange_rates)
-
-        return result
-    except:
-        return False
-
-
-def count_exchange_rates_percentile(
-    exchange_rates: numpy.array, percentile: int): return __reduce_exchange_rates(exchange_rates, lambda exchange_rates: numpy.percentile(exchange_rates, percentile))
-
-
-def count_exchange_rates_median(
-    exchange_rates): return __reduce_exchange_rates(exchange_rates, numpy.median)
-
-
-def count_exchange_rates_mean(
-    exchange_rates): return __reduce_exchange_rates(exchange_rates, numpy.mean)
 
 
 def get_exchange_rates(currency_base: str, currency_target: str, date_start: str, date_end: str):

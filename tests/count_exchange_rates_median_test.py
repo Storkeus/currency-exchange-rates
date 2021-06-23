@@ -1,7 +1,7 @@
 # count_exchange_rates_median function testing
 
+from lib.calculations_on_exchange_rates import count_exchange_rates_median
 import numpy
-from currency_stats import count_exchange_rates_median
 
 
 def test_empty_list():
