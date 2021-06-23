@@ -18,7 +18,8 @@ def __reduce_exchange_rates(exchange_rates: numpy.array, reducer):
             result = reducer(exchange_rates)
 
         return result
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 
