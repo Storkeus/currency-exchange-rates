@@ -1,8 +1,7 @@
 # Currency exchange rates statistics
 
 A console Python program that fetches
-echange rates from https://exchangerate.host/#/ and counts statistical data
-written as part of the recruitment process for shorte.st.
+echange rates from https://exchangerate.host/#/ and counts statistical data.
 
 ## Installation
 
